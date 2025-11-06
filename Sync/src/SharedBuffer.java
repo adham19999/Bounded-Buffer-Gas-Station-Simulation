@@ -1,5 +1,5 @@
 public class SharedBuffer {
-    private int size = 10;
+    private int size;
     private Car store[] = new Car[size];
     private int inptr = 0;
     private int outptr = 0;
@@ -8,8 +8,6 @@ public class SharedBuffer {
     private Semaphore spaces;    // counts empty slots
     private Semaphore elements;  // counts filled slots
     private Semaphore mutex;
-
-    Car car;
 
     public SharedBuffer(int size) {
         this.size = size;

@@ -22,19 +22,15 @@ class Semaphore {
     }
 
     public synchronized void waitSem() throws InterruptedException {
-        value--;
-        while(value < 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                
-            }
+        // wait while no permits available (handles spurious wakeups)
+        while (value == 0) {
+            wait();
         }
-        
+        value--;
     }
     public synchronized void signalSem() {
         value++;
-        notify();
+        notifyAll();
     }
 
     public synchronized int getValue() {

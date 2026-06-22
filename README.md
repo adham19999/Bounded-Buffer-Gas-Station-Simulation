@@ -1,4 +1,4 @@
-# ⛽ Synchronization OS — Gas Station Simulator
+# ⛽ Bounded Buffer Gas Station Simulation
 
 > A multithreaded **Producer–Consumer** simulation built in Java, modeling cars arriving at a gas station with limited waiting space and a fixed number of service pumps — synchronized using custom-built **semaphores**.
 

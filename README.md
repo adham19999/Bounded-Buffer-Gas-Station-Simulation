@@ -1,6 +1,6 @@
-# ⛽ Bounded Buffer Gas Station Simulation
+# Bounded Buffer Gas Station Simulation
 
-> A multithreaded **Producer–Consumer** simulation built in Java, modeling cars arriving at a gas station with limited waiting space and a fixed number of service pumps — synchronized using custom-built **semaphores**.
+A multithreaded **Producer–Consumer** simulation written in Java, modeling cars arriving at a gas station with limited waiting space and a fixed number of service pumps. Synchronization is handled by a custom-built semaphore implementation, not the Java standard library.
 
 <p align="left">
   <img alt="language" src="https://img.shields.io/badge/Language-Java-orange?style=flat-square&logo=openjdk">
@@ -9,23 +9,24 @@
   <img alt="status" src="https://img.shields.io/badge/Status-Complete-success?style=flat-square">
 </p>
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=2&section=header&customColorList=12"/>
 
-## 📖 Overview
+## Overview
 
-This project simulates a **gas station** as a classic synchronization problem from Operating Systems theory:
+This project models a gas station as a classic synchronization problem from Operating Systems theory:
 
-- 🚗 **Cars** arrive at random intervals and join a **waiting area** with limited capacity.
-- ⛽ **Pumps** (service bays) take cars from the waiting area and service them one at a time.
-- 🔒 Access to the shared waiting area is protected using a **custom Semaphore class** built from scratch on top of Java's `wait()` / `notifyAll()` — no built-in `java.util.concurrent.Semaphore` used.
+- **Cars** arrive at intervals and join a waiting area of fixed capacity.
+- **Pumps** (service bays) draw cars from the waiting area and service them one at a time.
+- Access to the shared waiting area is controlled by a **custom `Semaphore` class**, implemented from scratch using Java's intrinsic `wait()` / `notifyAll()` mechanisms — no `java.util.concurrent.Semaphore` is used.
 
-It's a hands-on demonstration of the **bounded-buffer (producer–consumer) problem**, where:
-- `Car` threads are **producers** → they enqueue themselves into the shared buffer.
-- `Pump` threads are **consumers** → they dequeue cars and "service" them.
+It is a practical implementation of the **bounded-buffer (producer–consumer) problem**:
 
----
+- `Car` threads act as **producers**, enqueuing themselves into the shared buffer.
+- `Pump` threads act as **consumers**, dequeuing cars and servicing them.
 
-## 🏗️ Architecture
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=2&section=header&customColorList=12"/>
+
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -53,44 +54,44 @@ flowchart LR
     B -- dequeue --> P3
 ```
 
-### 🔑 Synchronization primitives
+### Synchronization primitives
 
 | Semaphore | Purpose |
 |---|---|
-| `spaces` | Counts **empty slots** in the waiting area — blocks a car if the area is full. |
-| `elements` | Counts **occupied slots** — blocks a pump if there's no car to service. |
-| `mutex` | Guarantees **mutual exclusion** while a thread reads/writes the buffer pointers. |
-| `serviceBays` | Tracks free **pumps**, used to log when a car must wait for service. |
+| `spaces` | Counts empty slots in the waiting area; blocks a car if the area is full. |
+| `elements` | Counts occupied slots; blocks a pump if there is no car to service. |
+| `mutex` | Guarantees mutual exclusion while a thread reads or writes the buffer pointers. |
+| `serviceBays` | Tracks free pumps, used to log when a car must wait for a free bay. |
 
-This is the textbook **counting semaphore solution** to the bounded-buffer problem, implemented manually with Java's intrinsic locks.
+This is the standard counting-semaphore solution to the bounded-buffer problem, implemented manually on top of Java's intrinsic locks.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=2&section=header&customColorList=12"/>
 
-## 📂 Project Structure
+## Project Structure
 
 ```
-Synchronization-OS/
+Bounded-Buffer-Gas-Station-Simulation/
 └── Sync/
     └── src/
         └── 20230416_20231088_20230113_20230042_20230370_CS7_8.java
             ├── Colors          → ANSI terminal color codes for readable output
-            ├── Semaphore       → Custom counting semaphore (wait/signal)
+            ├── Semaphore       → Custom counting semaphore (wait / signal)
             ├── SharedBuffer    → Bounded circular buffer (the waiting area)
             ├── Car             → Producer thread
             ├── Pump            → Consumer thread
             └── ServiceStation  → main() — wires everything together
 ```
 
-> All classes live in a single file for simplicity — typical of an OS coursework submission.
+All classes are kept in a single file, consistent with the original coursework submission format.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=2&section=header&customColorList=12"/>
 
-## ▶️ How to Run
+## How to Run
 
 ### Requirements
-- JDK 8 or later (`java -version` / `javac -version` to check)
+- JDK 8 or later (`java -version` / `javac -version` to verify)
 
-### Compile & Run
+### Compile and Run
 
 ```bash
 cd Sync/src
@@ -119,26 +120,24 @@ C3 entered waiting area
 All cars processed; simulation ends.
 ```
 
-The console output is color-coded (🟡 car names, 🟣 pump activity, 🟢 success, 🔴 blocked/full states) for easy tracing of the synchronization behavior.
+Console output is color-coded by category (arrivals, pump activity, success, blocked/full states) to make the synchronization behavior easier to trace.
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=2&section=header&customColorList=12"/>
 
-## 🧠 Key Concepts Demonstrated
+## Key Concepts Demonstrated
 
-- ✅ Custom **Semaphore** implementation using `wait()` / `notifyAll()`
-- ✅ **Bounded-buffer / producer-consumer** synchronization pattern
-- ✅ **Mutual exclusion** around shared circular buffer state
-- ✅ Graceful **thread termination** via sentinel (`null`) values sent to consumers
-- ✅ Configurable simulation parameters (buffer size, pump count, car list) via stdin
+- Custom semaphore implementation using `wait()` / `notifyAll()`
+- Bounded-buffer / producer-consumer synchronization pattern
+- Mutual exclusion around shared circular buffer state
+- Graceful thread termination via sentinel (`null`) values sent to consumers
+- Configurable simulation parameters (buffer size, pump count, car list) via standard input
 
----
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=2&section=header&customColorList=12"/>
 
-## 👥 Contributors
+## Contributors
 
-This project was developed as a team submission for an **Operating Systems** course assignment (CS7/8), covering the synchronization unit.
+Developed as a team submission for an Operating Systems course assignment (CS7/8), covering the synchronization unit.
 
----
+## License
 
-## 📜 License
-
-This project was created for educational purposes as part of university coursework.
+Created for educational purposes as part of university coursework.
